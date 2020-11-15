@@ -1,0 +1,16 @@
+[2020.10.29 21:49:39] Launched version: 2004004, install beta: [FALSE], alpha: 0, debug mode: [FALSE]
+[2020.10.29 21:49:39] Executable dir: /snap/telegram-desktop/2141/usr/bin/, name: telegram-desktop
+[2020.10.29 21:49:39] Initial working dir: /home/artur/
+[2020.10.29 21:49:39] Working dir: /home/artur/snap/telegram-desktop/2141/.local/share/TelegramDesktop/
+[2020.10.29 21:49:39] Command line: telegram-desktop --
+[2020.10.29 21:49:39] Executable path before check: /snap/telegram-desktop/2141/usr/bin/telegram-desktop
+[2020.10.29 21:49:39] Logs started
+[2020.10.29 21:49:39] Launcher filename: telegram-desktop_telegram-desktop.desktop
+[2020.10.29 21:49:39] Getting DE, XDG_CURRENT_DESKTOP: 'ubuntu:GNOME'
+[2020.10.29 21:49:39] Getting DE, DESKTOP_SESSION: 'ubuntu'
+[2020.10.29 21:49:39] Getting DE, KDE_SESSION_VERSION: ''
+[2020.10.29 21:49:39] DE: Gnome
+[2020.10.29 21:49:39] Connecting local socket to /run/user/1000/snap.telegram-desktop/89b907550eb044cc80a07d4a787d041e...
+[2020.10.29 21:49:39] Socket connected, this is not the first application instance, sending show command...
+[2020.10.29 21:49:39] Show command written, waiting response...
+[2020.10.29 21:49:39] Show command response received, pid = 5153, activating and quitting...

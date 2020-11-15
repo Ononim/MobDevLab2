@@ -1,0 +1,111 @@
+### CONNECT TO MAIN HOST
+ssh stud001@77.47.193.168
+Ko9aiS1d
+### FOR SFTP CONNECTION
+### sftp stud001@77.47.193.168
+### ls, lls, pwd, lpwd, get, put
+### CONNECT TO VIRTUAL MACHINE
+ssh ubuntu@10.18.58.203
+ubuntu
+
+### TASKS FOR LAB
+1)
+nano /etc/network/interfaces
+### add next
+###
+auto ens19
+iface ens19 inet static
+    address 172.16.100.23
+    netmask 255.255.255.0
+    gateway 172.16.100.1
+###
+
+2)
+service networking restart
+
+3)
+#for IP in 172.16.100.195 172.16.100.196 172.16.100.190
+#do
+#    ping -c 2 $IP
+#    echo "[INFO] Ended ping" $IP
+#done
+
+ping 172.16.100.195
+ping 172.16.100.196
+ping 172.16.100.190
+
+4)
+traceroute 8.8.8.8
+traceroute kpi.ua
+traceroute google.com
+
+5)
+# netstat -anltu | grep -E "21|22|80|67|89|443|8080"
+netstat -an | grep 22
+netstat -an | grep 443
+
+6)
+nslookup ws1.okm2020.lab 10.18.58.195
+nslookup 172.20.10.5 10.18.58.195
+# comp.okm2020.lab
+dig @10.18.58.195 okm2020.lab
+
+7)
+### ON REMOTE-HOST 
+iperf -s
+### ON CLIENT-HOST
+iperf -c remote-host-ip
+### ON REMOTE-HOST
+.......................
+
+8)
+# nmap -sP 10.18.58.0/24 | grep "Nmap scan report for " | cut -c 22-
+nmap -sP 10.18.58.0/24 | grep 
+
+9)
+sudo tcpdump -w file.txt (-i ens19)
+ping 172.16.100.195
+
+# 
+traceroute 8.8.8.8
+
+
+wget 172.16.100.196/index.html
+wget 172.16.100.196/cat.jpg
+
+10)
+
+###(TCP)
+SYN -> SYN, ACK -> ACK
+ACK (PSH,ACK)
+ACK -> FIN,ACK -> FIN,ACK -> ACK
+###(HTTP)
+GET /cat.jpg HTTP/1.1\r\n
+    Request Method: GET
+    Request URI: /cat.jpg
+    Request Version: HTTP/1.1
+Full request URL: http://172.16.100.196/cat.jpg
+HTTP request 1/1
+
+HTTP/1.1 200 OK\r\n
+    Response Phrase: OK
+Date:...
+Server:...
+Content-Length:...
+Keep-Alive:...
+Content-Type: image/jpeg \\// text/html
+
+
+###TO KILL UNWANTED (CHILD)PING COMMAND
+ps -A | grep ping
+sudo kill PID
+###RUN TCPDUMP IN BACKGROUND
+sudo tcpdump -i ens19 -w file.txt &
+
+ping -I ens19 172.16.100.195 &>/dev/null & 
+
+sudo tcpdump -i ens19 icmp
+
+
+scp logfile stud001@77.47.193.168:/ubuntu/logfile
+scp stud001@77.47.193.168:/home/stud001/ubuntu/logfile /home/biowar1337/pt/saves/Lab4/logfile

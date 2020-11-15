@@ -1,0 +1,379 @@
+﻿ssh stud001@77.47.193.168 - проміжний сервер   
+password - Ko9aiS1d
+
+ssh ubuntu@10.18.58.208 (passwd - ubuntu)
+
+
+
+ssh stud003@77.47.193.168
+zahGh0ku
+ssh ubuntu@10.18.58.203
+sopranos
+
+
+### 1. How To Set Up vsftpd for User's Directory on Ubuntu
+sudo apt update
+sudo apt install vsftpd
+sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.orig
+
+sudo ufw enable
+sudo ufw status
+sudo ufw allow 20/tcp
+sudo ufw allow 21/tcp
+sudo ufw allow 990/tcp
+sudo ufw allow 40000:50000/tcp
+sudo ufw status
+
+
+(user1 - 1)
+sudo adduser user1
+sudo mkdir /home/user1/ftp
+sudo chown nobody:nogroup /home/user1/ftp
+sudo chmod a-w /home/user1/ftp
+sudo ls -la /home/user1/ftp
+sudo mkdir /home/user1/ftp/files
+sudo chown user1:user1 /home/user1/ftp/files
+echo "vsftpd test file" | sudo tee /home/user1/ftp/files/test.txt
+
+sudo nano /etc/vsftpd.conf
+## Add/Change Next Lines (vsftpd.conf)
+-listen=YES
+-listen_ipv6=NO
+
+-anonymous_enable=YES
+-anon_aupload_enable=YES
+
+-anon_mkdir_write_enable=YES
+-dirmessage_enable=YES
+
+-xferlog_enable=YES
+
+-xferlog_std_format=YES
+-local_enable=YES
+-write_enable=YES
+
+no_anon_password=YES
+anon_root=/var/ftp
+hide_ids=YES
+vsftpd_log_file=/var/log/vsftpd.log
+
+log_ftp_protocol=YES
+chroot_local_user=YES
+user_sub_token=$USER
+local_root=/home/$USER/ftp
+pasv_min_port=40000
+pasv_max_port=50000
+userlist_enable=YES
+userlist_file=/etc/vsftpd.userlist
+userlist_deny=NO
+
+-use_localtime=YES
+-connect_from_port_20=YES
+-secure_chroot_dir=/var/run/vsftpd/empty
+-pam_service_name=vsftpd
+
+
+echo "user1" | sudo tee -a /etc/vsftpd.userlist
+echo "ftp"   | sudo tee -a /etc/vsftpd.userlist
+sudo systemctl restart vsftpd
+
+ftp -p 10.18.58.203
+lftp ftp://user1@10.18.58.203
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem
+
+## Add/Change Next Lines (vsftpd.conf)
+
+# rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+# rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+rsa_cert_file=/etc/ssl/private/vsftpd.pem
+rsa_private_key_file=/etc/ssl/private/vsftpd.pem
+ssl_enable=NO
+allow_anon_ssl=NO
+force_local_data_ssl=YES
+force_local_logins_ssl=YES
+ssl_tlsv1=YES
+ssl_sslv2=NO
+ssl_sslv3=NO
+require_ssl_reuse=NO
+ssl_ciphers=HIGH
+
+
+на 204: lftp ftp://user1@10.18.58.202
+на 202: tcpdump -i ens18 dst 10.18.58.204 -w /home/user1/ftp.traffic
+tar -czvf ftp_traffic.tar.gz ftp.traffic ftp_over_tls.traffic
+scp user1@10.18.58.203:/home/user1/ftp_traffic.tar.gz /home/stud003/ftp_traffic.tar.gz
+
+## Connect FTP over TLS 
+lftp
+set ftp:ssl-force true
+set ssl:verify-certificate no 
+connect 10.18.58.203
+login user1 / ftp
+user1 / _____
+...
+bye
+##########################
+
+#2. DNS-server bind9
+
+Rostislav Koval, [17.05.20 12:22]
+# Theory
+# Domain Name System more commonly known as "DNS" is the networking system in place
+# that allows us to resolve human-friendly names to unique addresses.
+# Domain Name is the human-friendly name that we are used to associating with an
+# internet resource. For instance, "google.com" is a domain name. Some people will say that 
+# the "google" portion is the domain, but we can generally refer to the combined form as the
+# domain name.
+# Top Level Domain or TLD is the most general part of the domain. The top-level domain is the 
+# furthest portion to the right (as separated by a dot). Common top-level domains are "com", "net", 
+# "Org", "gov", "edu", and "io".
+# Top-level domains are at the top of the hierarchy in terms of domain names.
+# Certain parties are given management control over top-level domains by ICANN
+# (Internet Corporation for Assigned Names and Numbers). These parties can then distribute
+# domain names under the TLD, usualyy through a domain registrar.
+# Hosts within a domain, the domain owner can define individual hosts, which refer to 
+# separate computers or services accessible through a domain. For instance, most domain owners
+# make their web servers accessible through the bare domain (example.com) and also through the
+# "host" definition "www" (www.example.com)
+# SubDomain, for instance "ubuntu.com" can be said to be a subdomain of "com". This is a SLD,
+# which means second level domain.
+# Name server is a computer designated to translate domain names into IP addresses.
+# Zone file is a simple text file that contains the mappings between domain names and IP
+# addresses. 
+
+sudo su
+apt update; apt install bind9 bind9utils bind9-doc
+nano /etc/default/bind9
+###
+OPTIONS="-u bind -4"
+###
+systemctl restart bind9
+
+nano /etc/bind/named.conf.options
+###
+acl "trusted" {
+        10.18.58.203; #ftp
+        10.18.58.203; #http1
+        10.18.58.203; #http2
+        10.18.58.204; #PC1
+        10.18.58.205; #PC2
+};
+
+options {
+        directory "/var/cache/bind";
+
+        recursion yes; # enables recursive queries
+        allow-recursion { trusted; }; # allows recursive queries from "tru$
+        listen-on port 53 { localhost; 10.18.58.0/24; };  # listen on priv$
+        //allow-transfer { none; };     # disable zone transfers by default
+        allow-query { localhost; 10.18.58.0/24; };
+        forwarders {
+                8.8.8.8;
+                8.8.4.4;
+        };
+        // If there is a firewall between you and nameservers you want
+        // to talk to, you may need to fix the firewall to allow multiple
+        // ports to talk.  See http://www.kb.cert.org/vuls/id/800113
+
+        // If your ISP provided one or more IP addresses for stable
+        // nameservers, you probably want to use them as forwarders.
+        // Uncomment the following block, and insert the addresses replaci$
+        // the all-0's placeholder.
+
+        // forwarders {
+        //      0.0.0.0;
+        // };
+
+        //================================================================$
+        // If BIND logs error messages about the root key being expired,
+        // you will need to update your keys.  See https://www.isc.org/bin$
+        //================================================================$
+        dnssec-validation auto;
+
+        auth-nxdomain no;    # conform to RFC1035
+        listen-on-v6 { any; };
+};
+###
+
+nano /etc/bind/named.conf.local
+###
+//
+// Do any local configuration here
+//
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+//include "/etc/bind/zones.rfc1918";
+
+zone "lab3.org" {
+        type master;
+        file "/etc/bind/zones/forward.lab3.org"; # zone file path
+};
+
+zone "58.18.10.in-addr.arpa" {
+        type master;
+        file "/etc/bind/zones/reverse.lab3.org";
+};
+###
+
+mkdir /etc/bind/zones
+cp /etc/bind/db.local /etc/bind/zones/forward.lab3.org
+cp /etc/bind/db.127 /etc/bind/zones/reverse.lab3.org
+
+Rostislav Koval, [17.05.20 12:22]
+sudo nano /etc/resolf.conf # ADD nameserver 10.18.58.203
+sudo wget http://new.lab3.org
+sudo wget --user user1 --password user1 http://www.lab3.org
+
+Rostislav Koval, [17.05.20 12:22]
+nano /etc/bind/zones/forward.lab3.org
+###
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     primary.lab3.org. root.primary.lab3.org. (
+                              6         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;Name Server Information
+@       IN      NS      primary.lab3.org.
+
+;IP address of Your Domain Name Server(DNS)
+primary IN      A       10.18.58.203
+
+;A Record for Host names
+new     IN      A       10.18.58.203
+www     IN      A       10.18.58.203
+serv1   IN      A       10.18.58.203
+pc1     IN      A       10.18.58.204
+pc2     IN      A       10.18.58.205
+###
+
+nano /etc/bind/zones/reverse.lab3.org
+###
+;
+; BIND reverse data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     lab3.org. root.lab3.org. (
+                             21         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;Your Name Server Info
+@       IN      NS      primary.lab3.org.
+primary IN      A       10.18.58.203
+
+;Reverse Lookup for Your DNS Server
+203     IN      PTR     primary.lab3.org.
+
+;PTR Record IP address to HostName
+203     IN      PTR     serv1.lab3.org.
+203     IN      PTR     www.lab3.org.
+203     IN      PTR     new.lab3.org.
+204     IN      PTR     pc1.lab3.org.
+205     IN      PTR     pc2.lab3.org.
+###
+
+named-checkconf
+systemctl restart bind9
+systemctl status bind9
+ufw allow Bind9
+
+   18  nslookup pc1.lab3.org 10.18.58.203
+   19  nslookup pc2.lab3.org 10.18.58.203
+   20  nslookup www.lab3.org 10.18.58.203
+   21  nslookup serv1.lab3.org 10.18.58.203
+   22  nslookup new.lab3.org 10.18.58.203
+   23  nslookup 10.18.58.203 10.18.58.203
+   24  nslookup 10.18.58.204 10.18.58.203
+   25  nslookup 10.18.58.205 10.18.58.203
+
+
+#3. HTTP-server Apache2
+
+apt update; apt install apache2 apache2-utils
+
+ufw app list
+ufw allow 'Apache'
+ufw allow 80
+
+mkdir -p /var/www/www.lab3.org/test
+mkdir -p /var/www/new.lab3.org/test
+
+nano /vaw/www/www.lab3.org/test/index.html
+nano /vaw/www/new.lab3.org/test/index.html
+###
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Welcome to new.lab3.org</title>
+  </head>
+  <body>
+    <h1>Success! new.lab3.org home page!</h1>
+  </body>
+</html>
+###
+
+cat /etc/passwd # look for www-data
+chown -R www-data: /var/www/www.lab3.org/test
+chown -R www-data: /var/www/new.lab3.org/test
+chmod -R 755 /var/www
+
+nano /etc/apache2/sites-available/new.lab3.org.conf
+###
+<VirtualHost *:80>
+    ServerName new.lab3.org
+    ServerAlias new.lab3.org
+    ServerAdmin webmaster@lab3.org
+    DocumentRoot /var/www/new.lab3.org/test
+
+    <Directory /var/www/new.lab3.org/test/>
+    Order allow,deny
+    Allow from 10.18.58.203
+    Allow from 10.18.58.199
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/example.com-error.log
+    CustomLog ${APACHE_LOG_DIR}/example.com-access.log combined
+</VirtualHost>
+###
+
+mkdir /etc/htpasswd
+htpasswd -c /etc/htpasswd/.htpasswd user1
+
+nano /etc/apache2/sites-available/new.lab3.org.conf
+###
+<VirtualHost *:80>
+    ServerName www.lab3.org
+    ServerAlias www.lab3.org
+    ServerAdmin webmaster@lab3.org
+    DocumentRoot /var/www/www.lab3.org/test
+
+    <Directory "/var/www/www.lab3.org/test">
+    AuthType Basic
+    AuthName "Authentication Required"
+    AuthUserFile "/etc/htpasswd/.htpasswd"
+    Require valid-user
+
+    Order allow,deny
+    Allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/example.com-error.log
+    CustomLog ${APACHE_LOG_DIR}/example.com-access.log combined
+</VirtualHost>
+###
+
+a2ensite www.lab3.org.conf
+a2ensite new.lab3.org.conf
+a2dissite 000-default.conf
+apache2ctl configtest
+
+systemctl restart apache2
+systemctl status apache2

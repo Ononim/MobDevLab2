@@ -1,0 +1,76 @@
+[2020.10.29 21:36:03] Launched version: 2004004, install beta: [FALSE], alpha: 0, debug mode: [FALSE]
+[2020.10.29 21:36:03] Executable dir: /snap/telegram-desktop/2141/usr/bin/, name: telegram-desktop
+[2020.10.29 21:36:03] Initial working dir: /home/artur/
+[2020.10.29 21:36:03] Working dir: /home/artur/snap/telegram-desktop/2141/.local/share/TelegramDesktop/
+[2020.10.29 21:36:03] Command line: telegram-desktop --
+[2020.10.29 21:36:03] Executable path before check: /snap/telegram-desktop/2141/usr/bin/telegram-desktop
+[2020.10.29 21:36:03] Logs started
+[2020.10.29 21:36:03] Launcher filename: telegram-desktop_telegram-desktop.desktop
+[2020.10.29 21:36:03] Getting DE, XDG_CURRENT_DESKTOP: 'ubuntu:GNOME'
+[2020.10.29 21:36:03] Getting DE, DESKTOP_SESSION: 'ubuntu'
+[2020.10.29 21:36:03] Getting DE, KDE_SESSION_VERSION: ''
+[2020.10.29 21:36:03] DE: Gnome
+[2020.10.29 21:36:04] Connecting local socket to /run/user/1000/snap.telegram-desktop/89b907550eb044cc80a07d4a787d041e...
+[2020.10.29 21:36:04] This is the only instance of Telegram, starting server and app...
+[2020.10.29 21:36:04] Could not delete '/home/artur/snap/telegram-desktop/2141/.local/share/TelegramDesktop/log.txt' file to start new logging!
+isten: Address in use
+[2020.10.29 21:36:04] Moved logging from '/home/artur/snap/telegram-desktop/2141/.local/share/TelegramDesktop/log_start5.txt' to '/home/artur/snap/telegram-desktop/2141/.local/share/TelegramDesktop/log.txt'!
+[2020.10.29 21:36:04] Old start log 'log_start0.txt' found, deleted: [TRUE]
+[2020.10.29 21:36:04] Old start log 'log_start1.txt' found, deleted: [TRUE]
+[2020.10.29 21:36:04] Old start log 'log_start2.txt' found, deleted: [TRUE]
+[2020.10.29 21:36:04] Old start log 'log_start3.txt' found, deleted: [TRUE]
+[2020.10.29 21:36:04] Old start log 'log_start4.txt' found, deleted: [TRUE]
+[2020.10.29 21:36:04] Primary screen DPI: 96
+[2020.10.29 21:36:04] Font: from ':/gui/fonts/DAOpenSansRegular.ttf' loaded 'DAOpenSansRegular'
+[2020.10.29 21:36:04] Font: from ':/gui/fonts/DAVazirRegular.ttf' loaded 'DAVazirRegular'
+[2020.10.29 21:36:05] Font: from ':/gui/fonts/DAOpenSansRegularItalic.ttf' loaded 'DAOpenSansRegularItalic'
+[2020.10.29 21:36:05] Font: from ':/gui/fonts/DAVazirRegular.ttf' loaded 'DAVazirRegular'
+[2020.10.29 21:36:05] Font: from ':/gui/fonts/DAOpenSansSemiboldAsBold.ttf' loaded 'DAOpenSansSemibold'
+[2020.10.29 21:36:05] Font: from ':/gui/fonts/DAVazirMediumAsBold.ttf' loaded 'DAVazirMedium'
+[2020.10.29 21:36:05] Font: from ':/gui/fonts/DAOpenSansSemiboldItalicAsBold.ttf' loaded 'DAOpenSansSemiboldItalic'
+[2020.10.29 21:36:05] Font: from ':/gui/fonts/DAVazirMediumAsBold.ttf' loaded 'DAVazirMedium'
+[2020.10.29 21:36:05] Font: from ':/gui/fonts/DAOpenSansSemiboldAsBold.ttf' loaded 'DAOpenSansSemibold'
+[2020.10.29 21:36:05] Font: from ':/gui/fonts/DAVazirMediumAsBold.ttf' loaded 'DAVazirMedium'
+[2020.10.29 21:36:05] Font: from ':/gui/fonts/DAOpenSansSemiboldItalicAsBold.ttf' loaded 'DAOpenSansSemiboldItalic'
+[2020.10.29 21:36:05] Font: from ':/gui/fonts/DAVazirMediumAsBold.ttf' loaded 'DAVazirMedium'
+[2020.10.29 21:36:05] App Info: reading settings...
+[2020.10.29 21:36:05] App Info: reading encrypted settings...
+[2020.10.29 21:36:05] Lang Info: Loaded cached, keys: 2764
+[2020.10.29 21:36:06] OpenAL Logging Level: (not set)
+[2020.10.29 21:36:06] Audio Playback Devices: Built-in Audio Analog Stereo
+[2020.10.29 21:36:06] Audio Playback Default Device: Built-in Audio Analog Stereo
+[2020.10.29 21:36:06] Audio Capture Devices: Built-in Audio Analog Stereo;Monitor of Built-in Audio Analog Stereo
+[2020.10.29 21:36:06] Audio Capture Default Device: Built-in Audio Analog Stereo
+[2020.10.29 21:36:07] System tray available: [TRUE]
+[2020.10.29 21:36:07] Not using D-Bus global menu.
+[2020.10.29 21:36:07] Using Unity launcher counter.
+[2020.10.29 21:36:07] App Info: reading accounts info...
+[2020.10.29 21:36:07] App Info: reading encrypted info...
+[2020.10.29 21:36:07] App Info: reading map...
+[2020.10.29 21:36:07] App Info: reading encrypted map...
+[2020.10.29 21:36:07] App Info: reading encrypted user settings...
+[2020.10.29 21:36:07] App Info: encrypted user settings read.
+[2020.10.29 21:36:07] App Info: reading encrypted mtp data...
+[2020.10.29 21:36:07] MTP Info: read keys, current: 4, to destroy: 0
+[2020.10.29 21:36:07] Map read time: 9
+[2020.10.29 21:36:07] App Info: reading encrypted mtp config...
+[2020.10.29 21:36:07] TCP Error: network - Network unreachable
+[2020.10.29 21:36:07] HTTP Error: network error 99 - Network unreachable
+[2020.10.29 21:36:07] Export Info: Destroy top bar by controller removal.
+[2020.10.29 21:36:07] Using SNI tray icon.
+[2020.10.29 21:36:08] TCP Error: network - Network unreachable
+[2020.10.29 21:36:08] TCP Error: network - Network unreachable
+[2020.10.29 21:36:08] HTTP Error: network error 99 - Network unreachable
+[2020.10.29 21:36:08] HTTP Error: network error 99 - Network unreachable
+[2020.10.29 21:36:08] TCP Error: network - Network unreachable
+[2020.10.29 21:36:08] HTTP Error: network error 99 - Network unreachable
+[2020.10.29 21:36:08] Audio Info: recreating audio device and reattaching the tracks
+[2020.10.29 21:36:08] RPC Error: request 36 got fail with code 400, error USER_NOT_PARTICIPANT
+[2020.10.29 21:36:08] TCP Error: network - Network unreachable
+[2020.10.29 21:36:08] HTTP Error: network error 99 - Network unreachable
+[2020.10.29 21:36:09] TCP Error: network - Network unreachable
+[2020.10.29 21:36:09] HTTP Error: network error 99 - Network unreachable
+[2020.10.29 21:36:10] Audio Info: Closing audio playback device.
+[2020.10.29 21:36:30] TCP Error: network - Network unreachable
+[2020.10.29 21:36:30] HTTP Error: network error 99 - Network unreachable
+[2020.10.29 21:49:41] Api::Updates prevents quit, sending offline status...
